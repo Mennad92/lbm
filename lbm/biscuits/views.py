@@ -3,7 +3,10 @@ from rest_framework import permissions, viewsets
 
 from biscuits.serializers import *
 
-
 class ProduitViewSet(viewsets.ModelViewSet):
     queryset = Produit.objects.all()
     serializer_class = ProduitSerializer
+
+class CategorieViewSet(viewsets.ModelViewSet):
+    queryset = Categorie.objects.all()
+    serializer_class = CategorieSerializer
