@@ -7,7 +7,7 @@ class Category(models.Model):
     name = models.CharField(max_length=70)
  
     def __str__(self):
-        return self.nom
+        return self.name
 
     class Meta:
         verbose_name = "Category"
@@ -29,7 +29,7 @@ class Cart(models.Model):
     products = models.ManyToManyField(Product)
 
     def __str__(self):
-        return f"Panier de {self.user.username}"
+        return f"Cart of {self.user.username}"
 
 class Delivery(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
