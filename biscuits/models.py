@@ -1,71 +1,52 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Categorie(models.Model):
-    nom = models.CharField(max_length=70)
+class Category(models.Model):
+    name = models.CharField(max_length=70)
  
     def __str__(self):
         return self.nom
 
     class Meta:
-        verbose_name = "Catégorie"
-        verbose_name_plural = "Catégories"
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
-class Role(models.Model):
-    nom = models.CharField(max_length=70)
-    permission = models.CharField(max_length=255)
-
-    def definir_permission(self, nouvelle_permission):
-        self.permission = nouvelle_permission
-        self.save()
-
-    def __str__(self):
-        return self.nom
-
-class Produit(models.Model):
-    nom = models.CharField(max_length=70)
+class Product(models.Model):
+    name = models.CharField(max_length=70)
     description = models.TextField()
-    categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
-    prix = models.DecimalField(max_digits=10, decimal_places=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     illustration = models.TextField()
 
     def __str__(self):
-        return self.nom
+        return self.name
 
-class Compte(models.Model):
-    adresse = models.CharField(max_length=255)
-    telephone = models.CharField(max_length=20)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.username
-
-class Panier(models.Model):
-    user = models.ForeignKey(Compte, on_delete=models.CASCADE)
-    produits = models.ManyToManyField(Produit)
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product)
 
     def __str__(self):
         return f"Panier de {self.user.username}"
 
-class Livraison(models.Model):
-    montant = models.DecimalField(max_digits=10, decimal_places=2)
-    statut = models.CharField(max_length=50)
+class Delivery(models.Model):
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=50)
 
-    def livrer_commande(self, commande):
-        self.statut = "livrée"
+    def deliver_order(self, order):
+        self.status = "delivered"
         self.save
 
 
-    def changer_statut(self, nouveau_statut):
-        self.statut = nouveau_statut
+    def change_status(self, new_status):
+        self.status = new_status
         self.save()
 
     def __str__(self):
-        return f"Transaction {self.id} - Statut: {self.statut}"
+        return f"Transaction {self.id} - Status: {self.status}"
     
     class Meta:
-        verbose_name = "Livraison"
-        verbose_name_plural = "Livraisons"
+        verbose_name = "Delivery"
+        verbose_name_plural = "Deliveries"

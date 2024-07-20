@@ -1,20 +1,20 @@
 from biscuits.models import *
 from rest_framework import serializers
 
-class CategorieSerializer(serializers.HyperlinkedModelSerializer):
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Categorie
+        model = Category
         fields = ['url', 'id', 'nom']
         extra_kwargs = {
-            'url': {'view_name': 'categorie-detail', 'lookup_field': 'pk'}
+            'url': {'view_name': 'category-detail', 'lookup_field': 'pk'}
         }
 
-class ProduitSerializer(serializers.HyperlinkedModelSerializer):
-    categorie = serializers.HyperlinkedRelatedField(
-        view_name='categorie-detail',
-        queryset=Categorie.objects.all()
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
+    category = serializers.HyperlinkedRelatedField(
+        view_name='category-detail',
+        queryset=Category.objects.all()
     )
 
     class Meta:
-        model = Produit
-        fields = ['url', 'id', 'nom', 'description', 'categorie', 'prix', 'stock', 'illustration']
+        model = Product
+        fields = ['url', 'id', 'name', 'description', 'category', 'price', 'stock', 'illustration']
