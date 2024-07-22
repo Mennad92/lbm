@@ -14,14 +14,21 @@ class ExampleView(APIView):
 
     def get(self, request, format=None):
         content = {
-            'user': str(request.user),  # `django.contrib.auth.User` instance.
-            'auth': str(request.auth),  # None
+            'user': str(request.user), 
+            'auth': str(request.auth), 
         }
         return Response(content)
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        queryset = Product.objects.all()
+        category_id = self.request.query_params.get('category', None)
+        if category_id is not None:
+            queryset = queryset.filter(category_id=category_id)
+        return queryset
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
