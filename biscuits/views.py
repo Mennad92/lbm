@@ -1,23 +1,9 @@
 from biscuits.models import *
-from rest_framework import permissions, viewsets
+from rest_framework import viewsets
 from biscuits.serializers import *
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from rest_framework_simplejwt.authentication import JWTAuthentication
-
-class ExampleView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, format=None):
-        content = {
-            'user': str(request.user), 
-            'auth': str(request.auth), 
-        }
-        return Response(content)
+from django.views.generic import ListView
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -33,3 +19,14 @@ class ProductViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class RegisterView(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+class UserListView(ListView):
+    model = UserData
+    template_name = 'users/user_list.html'
