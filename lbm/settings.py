@@ -82,7 +82,6 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
-AUTH_USER_MODEL = 'biscuits.UserData'
 
 AUTH_PROFILE_MODULE = 'lbm.UserProfile'
 
@@ -106,17 +105,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lbm.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'lbm',
+        'USER': 'postgres',
+        'PASSWORD': 'Mennad.92',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

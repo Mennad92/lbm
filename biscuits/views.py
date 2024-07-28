@@ -27,6 +27,3 @@ class RegisterView(APIView):
         serializer.save()
         return Response(serializer.data)
 
-class UserListView(ListView):
-    model = UserData
-    template_name = 'users/user_list.html'
