@@ -46,14 +46,19 @@ class UserProfileViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def retrieve(self, request, pk=None):
-        user = request.user
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+        if pk == 'me':
+            user = request.user
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def update(self, request, pk=None):
-        user = request.user
-        serializer = UserSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        print("request.headers")
+        if pk == 'me':
+            user = request.user
+            serializer = UserSerializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_404_NOT_FOUND)
