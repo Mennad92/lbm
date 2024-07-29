@@ -82,7 +82,8 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
-
+AUTHENTICATION_BACKENDS = ['biscuits.auth_backends.EmailBackend']
+AUTH_USER_MODEL = 'biscuits.UserData'
 AUTH_PROFILE_MODULE = 'lbm.UserProfile'
 
 ROOT_URLCONF = 'lbm.urls'

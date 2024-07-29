@@ -1,5 +1,11 @@
 from biscuits.models import *
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer as JwtTokenObtainPairSerializer
+
+
+class TokenObtainPairSerializer(JwtTokenObtainPairSerializer):
+    username_field = get_user_model().USERNAME_FIELD
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,3 +18,16 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'category', 'price', 'stock', 'illustration']
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "email", "password"]
+
+    def create(self, validated_data):
+        user = UserData.objects.create(email=validated_data['email'],
+                                         )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
