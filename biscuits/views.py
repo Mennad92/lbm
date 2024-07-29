@@ -1,23 +1,28 @@
 from biscuits.models import *
-from rest_framework import permissions, viewsets
+from rest_framework import viewsets
 from biscuits.serializers import *
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.views.generic import ListView
+from django.contrib.auth import get_user_model
+from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
-class ExampleView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+class RegisterView(APIView):
+    http_method_names = ['post']
 
-    def get(self, request, format=None):
-        content = {
-            'user': str(request.user), 
-            'auth': str(request.auth), 
-        }
-        return Response(content)
+    def post(self, *args, **kwargs):
+        serializer = UserSerializer(data=self.request.data)
+        if serializer.is_valid():
+            get_user_model().objects.create_user(**serializer.validated_data)
+            return Response(status=HTTP_201_CREATED)
+        return Response(status=HTTP_400_BAD_REQUEST, data={'errors': serializer.errors})
+
+
+class EmailTokenObtainPairView(TokenObtainPairView):
+    serializer_class = TokenObtainPairSerializer
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
