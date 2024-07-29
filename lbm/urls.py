@@ -5,11 +5,12 @@ from biscuits import views
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenRefreshView
-
+from biscuits.views import UserProfileViewSet
 
 router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet, basename='product')
 router.register(r'categories', views.CategoryViewSet, basename='category')
+router.register(r'profile', views.UserProfileViewSet, basename='profile')
 
 urlpatterns = [
     path('api/', include(router.urls)),

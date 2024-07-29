@@ -73,11 +73,11 @@ class UserManager(BaseUserManager):
 class UserData(AbstractUser):
 
     username = None
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100,)
     email = models.EmailField(max_length=100, unique=True)
-    adress = models.CharField(max_length=100, unique=True)
-    city = models.CharField(max_length=100, unique=True)
-    country = models.CharField(max_length=100, unique=True)
+    adress = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
     phone = models.PositiveIntegerField(null=True, blank=True)
     postal = models.PositiveIntegerField(null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -107,4 +107,3 @@ class UserData(AbstractUser):
 
     def __str__(self):
         return self.email
-
