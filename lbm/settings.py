@@ -83,7 +83,7 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
-AUTHENTICATION_BACKENDS = ['biscuits.auth_backends.EmailBackend']
+AUTHENTICATION_BACKENDS = ['biscuits.auth_backends.EmailBackend', 'django.contrib.auth.backends.ModelBackend']
 AUTH_USER_MODEL = 'biscuits.UserData'
 AUTH_PROFILE_MODULE = 'lbm.UserProfile'
 

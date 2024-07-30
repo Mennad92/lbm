@@ -9,6 +9,7 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.exceptions import MethodNotAllowed
 
 
 class RegisterView(APIView):
@@ -62,3 +63,23 @@ class UserProfileViewSet(viewsets.ViewSet):
                 return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class ProfileViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        serializer = UserDataSerializer(request.user)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        raise MethodNotAllowed('PUT')
+
+    def create(self, request):
+        raise MethodNotAllowed('POST')
+
+    def destroy(self, request, pk=None):
+        raise MethodNotAllowed('DELETE')
+
+    def partial_update(self, request, pk=None):
+        raise MethodNotAllowed('PATCH')

@@ -6,10 +6,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenRefreshView
 
-
 router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet, basename='product')
 router.register(r'categories', views.CategoryViewSet, basename='category')
+router.register(r'profile', views.ProfileViewSet, basename='profile')
 
 urlpatterns = [
     path('api/', include(router.urls)),
