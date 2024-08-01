@@ -1,9 +1,8 @@
 from biscuits.models import *
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
 from biscuits.serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.generic import ListView
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
