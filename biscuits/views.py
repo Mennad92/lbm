@@ -72,6 +72,9 @@ class ProfileViewSet(viewsets.ViewSet):
         serializer = UserDataSerializer(request.user)
         return Response(serializer.data)
 
+    def retrieve(self, request, pk=None):
+        pass
+
     def update(self, request, pk=None):
         user = request.user
         data = request.data
@@ -94,4 +97,16 @@ class ProfileViewSet(viewsets.ViewSet):
         raise MethodNotAllowed('DELETE')
 
     def partial_update(self, request, pk=None):
-        raise MethodNotAllowed('PATCH')
+        user = request.user
+        data = request.data
+
+        user.first_name = data.get('first_name', user.first_name)
+        user.last_name = data.get('last_name', user.last_name)
+        user.address = data.get('address', user.address)
+        user.city = data.get('city', user.city)
+        user.phone = data.get('phone', user.phone)
+        user.postal = data.get('postal', user.postal)
+        user.save()
+
+        serializer = UserDataSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
