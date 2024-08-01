@@ -10,6 +10,7 @@ router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet, basename='product')
 router.register(r'categories', views.CategoryViewSet, basename='category')
 router.register(r'profile', views.ProfileViewSet, basename='profile')
+router.register(r'orders', views.OrderViewSet, basename='order')
 
 urlpatterns = [
     path('api/', include(router.urls)),

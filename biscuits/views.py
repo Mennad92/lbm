@@ -64,7 +64,6 @@ class UserProfileViewSet(viewsets.ViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-
 class ProfileViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
@@ -110,3 +109,22 @@ class ProfileViewSet(viewsets.ViewSet):
 
         serializer = UserDataSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class OrderViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        serializer = OrderSerializer(Order.objects.filter(owner=request.user))
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        raise MethodNotAllowed('PUT')
+
+    def create(self, request):
+        raise MethodNotAllowed('POST')
+
+    def destroy(self, request, pk=None):
+        raise MethodNotAllowed('DELETE')
+
+    def partial_update(self, request, pk=None):
+        raise MethodNotAllowed('PATCH')

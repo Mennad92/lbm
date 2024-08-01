@@ -37,3 +37,10 @@ class UserDataSerializer(serializers.ModelSerializer):
     class Meta :
         model = UserData
         fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    owner = UserDataSerializer()
+
+    class Meta:
+        model = Order
+        fields = '__all__'

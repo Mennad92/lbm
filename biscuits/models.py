@@ -1,8 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.conf import settings
-
-# Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=70)
@@ -24,26 +21,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
-class Delivery(models.Model):
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=50)
-
-    def deliver_order(self, order):
-        self.status = "delivered"
-        self.save
-
-
-    def change_status(self, new_status):
-        self.status = new_status
-        self.save()
-
-    def __str__(self):
-        return f"Transaction {self.id} - Status: {self.status}"
-    
-    class Meta:
-        verbose_name = "Delivery"
-        verbose_name_plural = "Deliveries"
 
 class UserManager(BaseUserManager):
 
@@ -106,3 +83,27 @@ class UserData(AbstractUser):
 
     def __str__(self):
         return self.email
+
+class Order(models.Model):
+    uuid = models.CharField(max_length=50,unique=True)
+    status = models.CharField(max_length=50)
+    owner = models.ForeignKey(UserData, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Commande {self.uuid} pour {self.owner.first_name} {self.owner.last_name} - Statut: {self.status}"
+    
+    class Meta:
+        verbose_name = "Order"
+        verbose_name_plural = "Orders"
+
+class OrderElement(models.Model):
+    quantity = models.PositiveIntegerField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    related_order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Element de commande {self.id} - {self.quantity} {self.product.name}"
+    
+    class Meta:
+        verbose_name = "OrderElement"
+        verbose_name_plural = "OrderElements"
