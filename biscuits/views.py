@@ -114,14 +114,21 @@ class OrderViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        serializer = OrderSerializer(Order.objects.filter(owner=request.user))
-        return Response(serializer.data)
+        serializer = OrderSerializer(Order.objects.filter(owner=request.user),many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
         raise MethodNotAllowed('PUT')
 
     def create(self, request):
-        raise MethodNotAllowed('POST')
+        print(request.data)
+        order = Order(uuid=request.data['uuid'], status=request.data['status'], owner=request.user)
+        order.save()
+        for element in request.data['elements']:
+            order_element = OrderElement(quantity=element['quantity'], product=Product.objects.get(id=element['id']), related_order=order)
+            order_element.save()
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, pk=None):
         raise MethodNotAllowed('DELETE')

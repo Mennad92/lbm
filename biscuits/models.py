@@ -85,8 +85,26 @@ class UserData(AbstractUser):
         return self.email
 
 class Order(models.Model):
+    WAITING_FOR_PAYMENT = 'WAITING_FOR_PAYMENT'
+    WAITING_FOR_EXPEDITION = 'WAITING_FOR_EXPEDITION'
+    IN_DELIVERY = 'IN_DELIVERY'
+    DELIVERED = 'DELIVERED'
+    CANCELLED = 'CANCELLED'
+
+    STATUS_CHOICES = [
+        (WAITING_FOR_PAYMENT, 'Waiting for Payment'),
+        (WAITING_FOR_EXPEDITION, 'Waiting for Expedition'),
+        (IN_DELIVERY, 'In Delivery'),
+        (DELIVERED, 'Delivered'),
+        (CANCELLED, 'Cancelled'),
+    ]
+
     uuid = models.CharField(max_length=50,unique=True)
-    status = models.CharField(max_length=50)
+    status = models.CharField(
+        max_length=50,
+        choices=STATUS_CHOICES,
+        default=WAITING_FOR_PAYMENT,
+    )
     owner = models.ForeignKey(UserData, on_delete=models.CASCADE)
 
     def __str__(self):
