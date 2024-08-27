@@ -85,15 +85,15 @@ class UserData(AbstractUser):
         return self.email
 
 class Order(models.Model):
-    WAITING_FOR_PAYMENT = 'WAITING_FOR_PAYMENT'
-    WAITING_FOR_EXPEDITION = 'WAITING_FOR_EXPEDITION'
-    IN_DELIVERY = 'IN_DELIVERY'
-    DELIVERED = 'DELIVERED'
-    CANCELLED = 'CANCELLED'
+    WAITING_FOR_PAYMENT = 'En attente de paiement'
+    EN_ATTENTE_DEXPEDITION = "En attente d'expedition"
+    IN_DELIVERY = 'En cours de livraison'
+    DELIVERED = 'Livré'
+    CANCELLED = 'Annulé'
 
     STATUS_CHOICES = [
         (WAITING_FOR_PAYMENT, 'Waiting for Payment'),
-        (WAITING_FOR_EXPEDITION, 'Waiting for Expedition'),
+        (EN_ATTENTE_DEXPEDITION, 'Waiting for Expedition'),
         (IN_DELIVERY, 'In Delivery'),
         (DELIVERED, 'Delivered'),
         (CANCELLED, 'Cancelled'),
