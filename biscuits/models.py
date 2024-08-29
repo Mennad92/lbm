@@ -11,6 +11,12 @@ class Category(models.Model):
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
+class Ingredient(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
     name = models.CharField(max_length=70)
     description = models.TextField()
@@ -18,6 +24,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     illustration = models.ImageField(upload_to='products/')
+    ingredients = models.ManyToManyField(Ingredient, related_name="products")
 
     def __str__(self):
         return self.name

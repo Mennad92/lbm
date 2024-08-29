@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import MethodNotAllowed
+from rest_framework.decorators import api_view
 
 
 class RegisterView(APIView):
@@ -134,3 +135,9 @@ class OrderViewSet(viewsets.ViewSet):
 
     def partial_update(self, request, pk=None):
         raise MethodNotAllowed('PATCH')
+
+@api_view(['GET'])
+def ingredient_list(request):
+    ingredients = Ingredient.objects.all()
+    serializer = IngredientSerializer(ingredients, many=True)
+    return Response(serializer.data)

@@ -12,12 +12,43 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name']
 
+class IngredientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ['id', 'name']
+
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'description', 'category', 'price', 'stock', 'illustration']
+        fields = ['id', 'name', 'description', 'category', 'price', 'stock', 'illustration', 'ingredients']
+    
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop('ingredients')
+        product = Product.objects.create(**validated_data)
+        for ingredient_data in ingredients_data:
+            ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'])
+            product.ingredients.add(ingredient)
+        return product
+
+    def update(self, instance, validated_data):
+        ingredients_data = validated_data.pop('ingredients')
+        instance.name = validated_data.get('name', instance.name)
+        instance.description = validated_data.get('description', instance.description)
+        instance.category = validated_data.get('category', instance.category)
+        instance.price = validated_data.get('price', instance.price)
+        instance.stock = validated_data.get('stock', instance.stock)
+        instance.illustration = validated_data.get('illustration', instance.illustration)
+        instance.save()
+
+        instance.ingredients.clear()
+        for ingredient_data in ingredients_data:
+            ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'])
+            instance.ingredients.add(ingredient)
+
+        return instance
+
 
 class UserSerializer(serializers.ModelSerializer):
 
