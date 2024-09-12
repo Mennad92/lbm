@@ -118,8 +118,18 @@ DATABASES = {
         'PASSWORD': 'Mennad.92',
         'HOST': 'localhost',
         'PORT': '5432',
-    }
+    },
+    'djongo': {
+            'ENGINE': 'djongo',
+            'NAME': 'Mennad',
+            'ENFORCE_SCHEMA': False,
+            'CLIENT': {
+                'host': 'mongodb+srv://DBAdmin:7c1K34Xs6Jpqjj1E@mennad.s0wbc.mongodb.net/?retryWrites=true&w=majority&appName=Mennad'
+            }  
+        }
 }
+
+DATABASE_ROUTERS = ['biscuits.routers.DjongoRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

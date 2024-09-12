@@ -132,3 +132,7 @@ class OrderElement(models.Model):
     class Meta:
         verbose_name = "OrderElement"
         verbose_name_plural = "OrderElements"
+
+class ProductData(models.Model):
+    visit_count = models.PositiveIntegerField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
