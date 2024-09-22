@@ -135,4 +135,4 @@ class OrderElement(models.Model):
 
 class ProductData(models.Model):
     visit_count = models.PositiveIntegerField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_id = models.PositiveIntegerField(unique=True, blank=True, null=True)
