@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,17 +26,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zhx%8)v+@%dkz#z0&v960r@3d*0za1#k5v6%*a^_*5qu+@02%8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
+
+if not IS_HEROKU_APP:
+    DEBUG = True
+
 HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '*',
-]
-
-if HEROKU_APP_NAME:
-    ALLOWED_HOSTS.append(f'{HEROKU_APP_NAME}.herokuapp.com')
+if IS_HEROKU_APP:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "0.0.0.0"]
 
 
 # Application definition
@@ -119,20 +121,38 @@ WSGI_APPLICATION = 'lbm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    'djongo': {
-        'ENGINE': 'djongo',
-        'NAME': 'Mennad',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': 'mongodb+srv://DBAdmin:7c1K34Xs6Jpqjj1E@mennad.s0wbc.mongodb.net/?retryWrites=true&w=majority&appName=Mennad'
-        }  
+if IS_HEROKU_APP:
+    DATABASES = {
+        "default": dj_database_url.config(
+            env="DATABASE_URL",
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        ),
+        'djongo': {
+            'ENGINE': 'djongo',
+            'NAME': 'Mennad',
+            'ENFORCE_SCHEMA': False,
+            'CLIENT': {
+                'host': 'mongodb+srv://DBAdmin:7c1K34Xs6Jpqjj1E@mennad.s0wbc.mongodb.net/?retryWrites=true&w=majority&appName=Mennad'
+            }  
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        },
+        'djongo': {
+            'ENGINE': 'djongo',
+            'NAME': 'Mennad',
+            'ENFORCE_SCHEMA': False,
+            'CLIENT': {
+                'host': 'mongodb+srv://DBAdmin:7c1K34Xs6Jpqjj1E@mennad.s0wbc.mongodb.net/?retryWrites=true&w=majority&appName=Mennad'
+            }  
+        }
+    }
 
 DATABASE_ROUTERS = ['biscuits.routers.DjongoRouter']
 
@@ -172,7 +192,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
