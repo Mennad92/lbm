@@ -1,4 +1,3 @@
-
 """
 Django settings for lbm project.
 
@@ -112,21 +111,17 @@ WSGI_APPLICATION = 'lbm.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lbm',
-        'USER': 'postgres',
-        'PASSWORD': 'Mennad.92',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     },
     'djongo': {
-            'ENGINE': 'djongo',
-            'NAME': 'Mennad',
-            'ENFORCE_SCHEMA': False,
-            'CLIENT': {
-                'host': 'mongodb+srv://DBAdmin:7c1K34Xs6Jpqjj1E@mennad.s0wbc.mongodb.net/?retryWrites=true&w=majority&appName=Mennad'
-            }  
-        }
+        'ENGINE': 'djongo',
+        'NAME': 'Mennad',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb+srv://DBAdmin:7c1K34Xs6Jpqjj1E@mennad.s0wbc.mongodb.net/?retryWrites=true&w=majority&appName=Mennad'
+        }  
+    }
 }
 
 DATABASE_ROUTERS = ['biscuits.routers.DjongoRouter']
