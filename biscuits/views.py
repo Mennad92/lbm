@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.decorators import api_view
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class RegisterView(APIView):
     http_method_names = ['post']
@@ -141,3 +141,23 @@ def ingredient_list(request):
     ingredients = Ingredient.objects.all()
     serializer = IngredientSerializer(ingredients, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def count_visits(request):
+    product_id = request.GET.get('product_id')
+    
+    if not product_id:
+        return Response({'error': 'product_id is required'}, status=400)
+    
+    try:
+        product_data = ProductData.objects.using("djongo").get(product_id=product_id)
+        product_data.visit_count +=  1
+        
+    except ObjectDoesNotExist:
+        product_data = ProductData(
+            product_id=product_id,
+            visit_count=1
+        )
+    product_data.save(using="djongo")
+    
+    return Response({'visits_count': product_data.visit_count})

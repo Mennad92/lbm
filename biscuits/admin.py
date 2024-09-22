@@ -1,12 +1,24 @@
 from django.contrib import admin
 from biscuits.models import *
+from django.core.exceptions import ObjectDoesNotExist
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'stock')
+    list_display = ('name', 'category', 'price', 'stock', 'get_visit_count')
     search_fields = ('name', 'category__name')
     list_filter = ('category',)
-    filter_horizontal = ('ingredients',) 
-    
+    filter_horizontal = ('ingredients',)
+
+    def get_visit_count(self, obj):        
+        try:
+            product_data = ProductData.objects.using("djongo").get(product_id=obj.id)
+            visit_count = product_data.visit_count
+        except ObjectDoesNotExist:
+            visit_count = 0
+        
+        return visit_count
+
+    get_visit_count.short_description = 'Nombre de visites'
+
 admin.site.register(Category)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(UserData)
