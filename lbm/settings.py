@@ -31,9 +31,9 @@ HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    '*',
 ]
 
-# Si l'application est sur Heroku, ajoutez le nom d'hôte Heroku
 if HEROKU_APP_NAME:
     ALLOWED_HOSTS.append(f'{HEROKU_APP_NAME}.herokuapp.com')
 
