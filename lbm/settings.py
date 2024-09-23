@@ -29,6 +29,9 @@ SECRET_KEY = 'django-insecure-zhx%8)v+@%dkz#z0&v960r@3d*0za1#k5v6%*a^_*5qu+@02%8
 
 IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
 
+if IS_HEROKU_APP:
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+
 if not IS_HEROKU_APP:
     DEBUG = True
 else:
@@ -36,8 +39,6 @@ else:
         DEBUG = True
     else:
         DEBUG = False
-
-HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
 
 if IS_HEROKU_APP:
     ALLOWED_HOSTS = ["*"]
@@ -139,7 +140,7 @@ if IS_HEROKU_APP:
             'NAME': 'Mennad',
             'ENFORCE_SCHEMA': False,
             'CLIENT': {
-                'host': 'mongodb+srv://DBAdmin:7c1K34Xs6Jpqjj1E@mennad.s0wbc.mongodb.net/?retryWrites=true&w=majority&appName=Mennad'
+                'host': os.environ.get('MONGODB_URL')
             }  
         }
     }
