@@ -31,6 +31,11 @@ IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
 
 if not IS_HEROKU_APP:
     DEBUG = True
+else:
+    if os.environ.get('DEBUG_MODE') == 'True':
+        DEBUG = True
+    else:
+        DEBUG = False
 
 HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
 
