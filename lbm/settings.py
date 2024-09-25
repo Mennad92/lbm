@@ -59,7 +59,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'biscuits.apps.BiscuitsConfig',
+    'db_file_storage',
 ]
+
+DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

@@ -1,12 +1,23 @@
 from django.contrib import admin
 from biscuits.models import *
 from django.core.exceptions import ObjectDoesNotExist
+from django import forms
+from db_file_storage.form_widgets import DBAdminClearableFileInput
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        exclude = []
+        widgets = {
+            'picture': DBAdminClearableFileInput
+        }
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price', 'stock', 'get_visit_count')
     search_fields = ('name', 'category__name')
     list_filter = ('category',)
     filter_horizontal = ('ingredients',)
+    form = ProductForm
 
     def get_visit_count(self, obj):        
         try:

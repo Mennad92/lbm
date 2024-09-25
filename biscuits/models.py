@@ -1,4 +1,5 @@
 from django.db import models
+from db_file_storage.model_utils import delete_file, delete_file_if_needed
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 class Category(models.Model):
@@ -17,17 +18,30 @@ class Ingredient(models.Model):
     def __str__(self):
         return self.name
 
+class ProductPicture(models.Model):
+    bytes = models.TextField()
+    filename = models.CharField(max_length=255)
+    mimetype = models.CharField(max_length=50)
+
 class Product(models.Model):
     name = models.CharField(max_length=70)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
-    illustration = models.ImageField(upload_to='products/')
+    illustration = models.ImageField(upload_to='biscuits.ProductPicture/bytes/filename/mimetype', blank=True, null=True)
     ingredients = models.ManyToManyField(Ingredient, related_name="products")
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        delete_file_if_needed(self, 'illustration')
+        super(Product, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        super(Product, self).delete(*args, **kwargs)
+        delete_file(self, 'illustration')
 
 class UserManager(BaseUserManager):
 

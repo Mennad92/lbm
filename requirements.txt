@@ -11,3 +11,4 @@ djangorestframework-simplejwt
 dj_database_url
 pillow
 gunicorn 
+django-db-file-storage

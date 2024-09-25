@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.conf.urls import url
 from django.urls import include, path
 from rest_framework import routers
 from biscuits import views
@@ -20,6 +21,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/ingredients/', views.ingredient_list, name='ingredient_list'),
     path('api/count-visits/', views.count_visits, name='count_visits'),
+    url(
+        r'^files/',
+        include('db_file_storage.urls')
+    ),
 ]
 
 if settings.DEBUG:
